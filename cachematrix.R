@@ -1,7 +1,12 @@
-## Put comments here that give an overall description of what your
-## functions do
+## This file contains function that can be used
+## to make repeatedly computing the inverse of a
+## given matrix more efficient by caching the result.
 
-## Write a short comment describing this function
+
+## This is a constructor for a cached matrix.
+## It adds a couple of functions to a standard
+## matrix to make it possible to cache the result
+## of computing the inverse of the matrix.
 
 makeCacheMatrix <- function(x = matrix()) {
   inverse_matrix <- NULL
@@ -18,14 +23,21 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 
-## Write a short comment describing this function
+## This is a cached version of solve()
+## It computes the inverse of a matrix but caches the results thus
+## saving valuable computing time when called multiple times.
+## Parameters:
+## x - a CacheMatrix
+## .. - any arguments you want to pass to solve()
 
 cacheSolve <- function(x, ...) {
   ## Return a matrix that is the inverse of 'x'
   inv <- x$get_inverse()
   if(!is.null(inv)) {
+    # We know the answer already.
     return(inv)
   }
+  # Have to compute it.
   data <- x$get()
   inv <- solve(data, ...)
   x$set_inverse(inv)
@@ -33,8 +45,3 @@ cacheSolve <- function(x, ...) {
 }
 
 
-
-set.seed(11230)
-test_mat <- matrix(as.integer(100*rnorm(1600)),40,40)
-
-cm <- makeCacheMatrix(test_mat)
